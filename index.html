@@ -1,15 +1,30 @@
 <!DOCTYPE html>
 <html lang="ko">
     <head>
-        <title>PIET 인터프리터</title>
         <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <title>PIET 인터프리터</title>
+        
+        <style>
+            #myCanvas{
+                border: 1px solid black;
+            }
+        </style>
     </head>
+    
     <body>
         <h1>PIET 인터프리터</h1>
-        <canvas width="540" height="480" id="testcanvas" style="border: 1px solid lightblue;">
+        
+        <canvas id="testcanvas" width="540" height="480">
         </canvas>
-        <form>
-            <input type='text'/>
-        </form>
+        
+        <script>
+            const canvas = document.getElementById('myCanvas');
+            const ctx = canvas.getContext("2d");
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(0, 0, 150, 75);
+        </script>
     </body>
 </html>
