@@ -11,12 +11,20 @@
     <body>
         <h1>PIET 인터프리터</h1>
         
-        <canvas id="myCanvas" width="540" height="480">
+        <canvas id="myCanvas" width="600" height="600">
         </canvas>
         
         <script>
             const canvas = document.getElementById('myCanvas');
             const ctx = canvas.getContext("2d");
+            ctx.strokeStyle = 'black'
+            ctx.lineWidth = 1;
+            for (var i = 0; i <= 30; i++) {
+                ctx.beginPath()
+                ctx.moveTo(0, i * 20)
+                ctx.lineTo(600, i * 20)
+                ctx.stroke()
+            }
             ctx.fillStyle = 'blue';
             ctx.fillRect(0, 0, 150, 75);
         </script>
