@@ -29,12 +29,20 @@
         <div class = 'pallete-div'>
             <canvas id="myPallete" width="360" height="240"></canvas>
             <div class = 'nowColor-div'>
-                <h5>선택된 색</h5>
+                <h5>선택한 색</h5>
                 <canvas id="myNowColor" width="60" height="60"></canvas>
             </div>
         </div>
+        <div>
+            <input type="button" value="삭제" onclick="javascript:deleteCanvas();">
+            <input type="button" value="초기화" onclick="javascript:reset();">
+            <input type="button" value="한 단계 실행" onclick="javascript:oneStep();">
+            <input type="button" value="다운로드" onclick="javascript:download();">
+        </div>
         <canvas id="myCanvas" width="900" height="900"></canvas>
-        
+        <textarea id="input" rows="5" cols="20" style="overflow:auto"></textarea>
+        <textarea id="output" rows="5" cols="20" style="overflow:auto" readonly></textarea>
         <script src="myScript.js"></script>
+        
     </body>
 </html>
