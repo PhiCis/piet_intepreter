@@ -6,13 +6,34 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <title>PIET 인터프리터</title>
+        <style>
+            .pallete-div{
+                height: 300px;
+                width: 500px;
+                position: relative;
+                /* background-color : #999999; */
+            }
+            .nowColor-div{
+                height: 300px;
+                width: 100px;
+                position: absolute;
+                top: 50%;
+                transform: translate(400px, -50%);
+                /* background-color : #CCCCCC; */
+            }
+        </style>
     </head>
     
     <body>
-        <h1>PIET 인터프리터</h1>
-        
-        <canvas id="myCanvas" width="600" height="600">
-        </canvas>
+        <h2>PIET 인터프리터</h2>
+        <div class = 'pallete-div'>
+            <canvas id="myPallete" width="360" height="240"></canvas>
+            <div class = 'nowColor-div'>
+                <h5>선택된 색</h5>
+                <canvas id="myNowColor" width="60" height="60"></canvas>
+            </div>
+        </div>
+        <canvas id="myCanvas" width="900" height="900"></canvas>
         
         <script src="myScript.js"></script>
     </body>
