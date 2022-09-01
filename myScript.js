@@ -70,8 +70,8 @@ canvas.onmousemove = function(event)
 {
     if(canvasMouseDown)
     {
-        const x = event.clientX + window.pageXOffset - ctx.canvas.offsetLeft
-        const y = event.clientY + window.pageYOffset - ctx.canvas.offsetTop
+        const x = event.offsetX
+        const y = event.offsetY
         
         ctx.fillStyle = ntx.fillStyle
         for(var i = 0; i < 20; i++)
@@ -91,8 +91,8 @@ canvas.onmouseup = function(event)
 }
 canvas.onclick = function(event)
 {
-    const x = event.clientX + window.pageXOffset - ctx.canvas.offsetLeft
-    const y = event.clientY + window.pageYOffset - ctx.canvas.offsetTop
+    const x = event.offsetX
+    const y = event.offsetY
     
     ctx.fillStyle = ntx.fillStyle
     for(var i = 0; i < 20; i++)
@@ -160,7 +160,7 @@ var outputString = ""
 
 var pointer = 0
 
-var step = 0
+var step = -1
 var tries = 0 //from 0 to 7
 var codelX = 0
 var codelY = 0
@@ -169,17 +169,19 @@ var CC = 0
 
 var stack = []
 
-function reset()
+function reset(outputDelete)
 {
     pointer = 0
 
-    step = 0
+    step = -1
     tries = 0
     codelX = 0
     codelY = 0
     DP = 0
     CC = 0
     stack = []
+
+    if(outputDelete) output.value = ""
 }
 
 function bfs(x, y)
@@ -220,8 +222,9 @@ function bfs(x, y)
 
 function oneStep()
 {
-    if(step == 0) //first of first
+    if(step == -1) //first of first
     {
+        step = 0
         input  = document.getElementById('input')
         output = document.getElementById('output')
         inputString = input.value
@@ -312,7 +315,8 @@ function oneStep()
             if(tries >= 8)
             {
                 console.log('code was ended')
-                reset()
+                reset(false)
+                step = -1
                 return;
             }
             continue;
@@ -503,13 +507,67 @@ function oneStep()
     }
 }
 
-function download()
+function execute()
 {
-    var element = document.createElement('a')
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent("hello, world!"))
-    element.setAttribute('download', 'filename')
-    element.style.display = 'none'
-    document.body.appendChild(element)
-    element.click()
-    document.body.removeChild(element)
+    oneStep()
+    while(step != -1)
+    {
+        oneStep()
+    }
+}
+
+function stopStep()
+{
+    step = -1
+}
+
+const exportButton = document.getElementById('download');
+exportButton.addEventListener('click', exportFile);
+const link = document.createElement( 'a' );
+link.style.display = 'none';
+document.body.appendChild(link);
+
+function exportFile() {
+    const buffer = createData(); /* ArrayBuffer 형식의 데이터를 생성하는 함수 */ 
+    const blob = new Blob([buffer], {type: 'application/octet-stream'})
+    link.href = URL.createObjectURL(blob);
+    link.download = 'file.bmp';
+    link.click();
+}
+
+function createData()
+{
+    const pad = canvasN % 4
+    const uint8 = new Uint8Array(26 + canvasN * canvasN * 3 + canvasN * pad)
+    uint8[0] = 0x42; 
+    uint8[1] = 0x4d; 
+
+    uint8[2] = (26 + canvasN * canvasN * 3 + canvasN * pad) % 256
+    uint8[3] = (26 + canvasN * canvasN * 3 + canvasN * pad) / 256
+
+    uint8[10] = 0x1a;
+    uint8[14] = 0x0c;
+
+    uint8[18] = canvasN;
+    uint8[20] = canvasN;
+
+    uint8[22] = 0x01;
+    uint8[24] = 0x18;
+
+    for(var i = 0; i < 30; i++)
+    {
+        for(var j = 0; j < 30; j++)
+        {
+            var hex = color[canvasColor[j][canvasN - 1 - i]]
+            uint8[26 + (i * canvasN + j) * 3 + 2 + i * pad] = parseInt(hex[1] + hex[2], 16);
+            uint8[26 + (i * canvasN + j) * 3 + 1 + i * pad] = parseInt(hex[3] + hex[4], 16);
+            uint8[26 + (i * canvasN + j) * 3 + 0 + i * pad] = parseInt(hex[5] + hex[6], 16);
+        }
+    }
+    return uint8.buffer
+}
+
+function upload()
+{
+
 }
