@@ -7,41 +7,96 @@
         
         <title>PIET 인터프리터</title>
         <style>
-            .pallete-div{
-                height: 300px;
-                width: 500px;
+            .div{
+                height: 900px;
+                width: 1300px;
                 position: relative;
+                /* background-color : #333333; */
+            }
+            .pallete-div{
+                height: 240px;
+                width: 360px;
+                text-align: center;
+                position: absolute;
+                transform: translate(0px, 0px);
                 /* background-color : #999999; */
             }
             .nowColor-div{
-                height: 300px;
+                height: 150px;
                 width: 100px;
+                text-align: center;
                 position: absolute;
-                top: 50%;
-                transform: translate(400px, -50%);
+                transform: translate(130px, 240px);
                 /* background-color : #CCCCCC; */
+            }
+            .put-div{
+                height: 400px;
+                width: 360px;
+                text-align: center;
+                position: absolute;
+                transform: translate(0px, 500px);
+                /* background-color : #EEEEEE; */
+            }
+            .button-div{
+                height: 120px;
+                width: 360px;
+                text-align: center;
+                position: absolute;
+                transform: translate(0px, 400px);
+            }
+            .canvas-div{
+                height: 900px;
+                width: 900px;
+                text-align: center;
+                position: absolute;
+                transform: translate(400px, 0px);
+            }
+            .button{
+                background-color: rgb(150, 214, 240);
+                border: none;
+                border-radius: 10px;
+                color: black;
+                padding: 5px 10px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 20px;
+                margin: 4px 2px;
+                cursor: pointer;
             }
         </style>
     </head>
     
     <body>
         <h2>PIET 인터프리터</h2>
-        <div class = 'pallete-div'>
-            <canvas id="myPallete" width="360" height="240"></canvas>
+        <div class = 'div'>
+            <div class = 'pallete-div'>
+                <canvas id="myPallete" width="360" height="240"></canvas>
+            </div>
             <div class = 'nowColor-div'>
                 <h5>선택한 색</h5>
                 <canvas id="myNowColor" width="60" height="60"></canvas>
             </div>
+            <div class = 'put-div'>
+                <h5>입력</h5>
+                <textarea id="input" rows="8" cols="40" style="overflow:auto"></textarea>
+                <h5>출력</h5>
+                <textarea id="output" rows="8" cols="40" style="overflow:auto" readonly></textarea>
+            </div>
+            <div class = 'button-div'>
+                <button type="button" class="button" onclick="deleteCanvas();">캔버스 삭제</button>
+                <button type="button" class="button" onclick="reset(true);">초기화</button>
+                <button type="button" class="button" onclick="oneStep();">한 단계 실행</button>
+                <button type="button" class="button" onclick="execute();">실행</button>
+                <button type="button" class="button" onclick="stopStep();">중지</button>
+                <button type="button" id="download" class="button">다운로드</button>
+                <button type="button" id="upload" class="button" onclick="upload();"><del>업로드</del></button>
+            </div>
+            <div class = 'canvas-div'>
+                <canvas id="myCanvas" width="900" height="900"></canvas>
+            </div>
         </div>
-        <div>
-            <input type="button" value="삭제" onclick="javascript:deleteCanvas();">
-            <input type="button" value="초기화" onclick="javascript:reset();">
-            <input type="button" value="한 단계 실행" onclick="javascript:oneStep();">
-            <input type="button" value="다운로드" onclick="javascript:download();">
-        </div>
-        <canvas id="myCanvas" width="900" height="900"></canvas>
-        <textarea id="input" rows="5" cols="20" style="overflow:auto"></textarea>
-        <textarea id="output" rows="5" cols="20" style="overflow:auto" readonly></textarea>
+        
         <script src="myScript.js"></script>
         
     </body>
