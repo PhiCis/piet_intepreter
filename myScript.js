@@ -20,7 +20,6 @@ ctx.lineWidth   = "0.5"
 const palleteSize = 60
 const myColorSize = 60
 const canvasSize  = 30
-var canvasN       = 30
 var canvasColor   = []
 var palleteColor  = 18
 
@@ -29,6 +28,48 @@ const ntx      = nowColor.getContext("2d")
 ntx.strokeStyle = color[19]
 ntx.fillStyle   = color[palleteColor]
 ntx.lineWidth   = "1"
+
+const widthSlider = document.getElementById("myWidth");
+const canvasWidth = document.getElementById("canvasWidth");
+canvasWidth.innerHTML = widthSlider.value;
+var canvasW = widthSlider.value;
+
+const heightSlider = document.getElementById("myHeight");
+const canvasHeight = document.getElementById("canvasHeight");
+canvasHeight.innerHTML = heightSlider.value;
+var canvasH = heightSlider.value;
+
+widthSlider.oninput = function() {
+    canvasWidth.innerHTML = this.value;
+    canvasW = widthSlider.value;
+    ctx.fillStyle = color[18]
+    ctx.fillRect(0, 0, 3000, 3000)
+    for(var i = 0; i < canvasW; i++) 
+    {
+        for(var j = 0; j < canvasH; j++)
+        {
+            ctx.fillStyle = color[canvasColor[i][j]]
+            ctx.fillRect(i * canvasSize, j * canvasSize, canvasSize, canvasSize)
+            ctx.strokeRect(i * canvasSize, j * canvasSize, canvasSize, canvasSize)
+        }
+    }
+}
+
+heightSlider.oninput = function() {
+    canvasHeight.innerHTML = this.value;
+    canvasH = heightSlider.value;
+    ctx.fillStyle = color[18]
+    ctx.fillRect(0, 0, 3000, 3000)
+    for(var i = 0; i < canvasW; i++) 
+    {
+        for(var j = 0; j < canvasH; j++)
+        {
+            ctx.fillStyle = color[canvasColor[i][j]]
+            ctx.fillRect(i * canvasSize, j * canvasSize, canvasSize, canvasSize)
+            ctx.strokeRect(i * canvasSize, j * canvasSize, canvasSize, canvasSize)
+        }
+    }
+}
 
 //initiate
 for(var i = 0; i < 6; i++) 
@@ -50,12 +91,15 @@ ptx.strokeRect(3 * palleteSize, 3 * palleteSize, 3 * palleteSize, palleteSize)
 ntx.fillRect  (0, 0, myColorSize, myColorSize)
 ntx.strokeRect(0, 0, myColorSize, myColorSize)
 
-for(var i = 0; i < canvasN; i++) 
+for(var i = 0; i < 100; i++) 
 {
     var temp = []
-    for(var j = 0; j < canvasN; j++)
+    for(var j = 0; j < 100; j++)
     {
-        ctx.strokeRect(i * canvasSize, j * canvasSize, canvasSize, canvasSize)
+        if(i < canvasW && j < canvasH)
+        {
+            ctx.strokeRect(i * canvasSize, j * canvasSize, canvasSize, canvasSize)
+        }
         temp.push(18)
     }
     canvasColor.push(temp)
@@ -72,17 +116,19 @@ canvas.onmousemove = function(event)
     {
         const x = event.offsetX
         const y = event.offsetY
-        
-        ctx.fillStyle = ntx.fillStyle
-        for(var i = 0; i < 20; i++)
+        if(x < canvasW * canvasSize && y < canvasH * canvasSize)
         {
-            if(color[i] == ctx.fillStyle)
+            ctx.fillStyle = ntx.fillStyle
+            for(var i = 0; i < 20; i++)
             {
-                canvasColor[parseInt(x / canvasSize)][parseInt(y / canvasSize)] = i
+                if(color[i] == ctx.fillStyle)
+                {
+                    canvasColor[parseInt(x / canvasSize)][parseInt(y / canvasSize)] = i
+                }
             }
+            ctx.fillRect  (parseInt(x / canvasSize) * canvasSize, parseInt(y / canvasSize) * canvasSize, canvasSize, canvasSize)
+            ctx.strokeRect(parseInt(x / canvasSize) * canvasSize, parseInt(y / canvasSize) * canvasSize, canvasSize, canvasSize)    
         }
-        ctx.fillRect  (parseInt(x / canvasSize) * canvasSize, parseInt(y / canvasSize) * canvasSize, canvasSize, canvasSize)
-        ctx.strokeRect(parseInt(x / canvasSize) * canvasSize, parseInt(y / canvasSize) * canvasSize, canvasSize, canvasSize)
     }
 }
 canvas.onmouseup = function(event)
@@ -93,17 +139,19 @@ canvas.onclick = function(event)
 {
     const x = event.offsetX
     const y = event.offsetY
-    
-    ctx.fillStyle = ntx.fillStyle
-    for(var i = 0; i < 20; i++)
+    if(x < canvasW * canvasSize && y < canvasH * canvasSize)
     {
-        if(color[i] == ctx.fillStyle)
+        ctx.fillStyle = ntx.fillStyle
+        for(var i = 0; i < 20; i++)
         {
-            canvasColor[parseInt(x / canvasSize)][parseInt(y / canvasSize)] = i
+            if(color[i] == ctx.fillStyle)
+            {
+                canvasColor[parseInt(x / canvasSize)][parseInt(y / canvasSize)] = i
+            }
         }
-    }
-    ctx.fillRect  (parseInt(x / canvasSize) * canvasSize, parseInt(y / canvasSize) * canvasSize, canvasSize, canvasSize)
-    ctx.strokeRect(parseInt(x / canvasSize) * canvasSize, parseInt(y / canvasSize) * canvasSize, canvasSize, canvasSize)
+        ctx.fillRect  (parseInt(x / canvasSize) * canvasSize, parseInt(y / canvasSize) * canvasSize, canvasSize, canvasSize)
+        ctx.strokeRect(parseInt(x / canvasSize) * canvasSize, parseInt(y / canvasSize) * canvasSize, canvasSize, canvasSize)    
+    }    
 }
 
 pallete.onclick = function(event)
@@ -139,13 +187,16 @@ pallete.onclick = function(event)
 function deleteCanvas()
 {
     ctx.fillStyle = color[18]
-    for(var i = 0; i < canvasN; i++) 
+    for(var i = 0; i < 100; i++) 
     {
-        for(var j = 0; j < canvasN; j++)
+        for(var j = 0; j < 100; j++)
         {
             canvasColor[i][j]=18
-            ctx.fillRect  (i * canvasSize, j * canvasSize, canvasSize, canvasSize)
-            ctx.strokeRect(i * canvasSize, j * canvasSize, canvasSize, canvasSize)
+            if(i < canvasW && j < canvasH)
+            {
+                ctx.fillRect  (i * canvasSize, j * canvasSize, canvasSize, canvasSize)
+                ctx.strokeRect(i * canvasSize, j * canvasSize, canvasSize, canvasSize)
+            }
         }
     }
 }
@@ -153,6 +204,7 @@ function deleteCanvas()
 //one step execute
 var input  = document.getElementById('input')
 var output = document.getElementById('output')
+var debug = document.getElementById('debug')
 const dx = [1, 0, -1, 0]
 const dy = [0, 1, 0, -1]
 var inputString = ""
@@ -188,10 +240,10 @@ function bfs(x, y)
 {
     var list = []
     var visited = []
-    for(var i = 0; i < canvasN; i++)
+    for(var i = 0; i < canvasW; i++)
     {
         var temp = []
-        for(var j = 0; j < canvasN; j++)
+        for(var j = 0; j < canvasH; j++)
         {
             temp.push(false)
         }
@@ -208,7 +260,7 @@ function bfs(x, y)
         for(var i = 0; i < 4; i++)
         {
             var v = [u[0] + dx[i], u[1] + dy[i]]
-            if(v[0] >= 0 && v[0] < canvasN && v[1] >= 0 && v[1] < canvasN && visited[v[0]][v[1]] == false && canvasColor[v[0]][v[1]] == canvasColor[u[0]][u[1]])
+            if(v[0] >= 0 && v[0] < canvasW && v[1] >= 0 && v[1] < canvasH && visited[v[0]][v[1]] == false && canvasColor[v[0]][v[1]] == canvasColor[u[0]][u[1]])
             {
                 visited[v[0]][v[1]] = true
                 list.push(v)
@@ -289,13 +341,13 @@ function oneStep()
 
         console.log("step:", step, ", tries:", tries, ", codelX:", codelX, ", codelY:", codelY);
 
-        while(codelX >= 0 && codelX < canvasN && codelY >= 0 && codelY < canvasN && canvasColor[codelX][codelY] == 18)
+        while(codelX >= 0 && codelX < canvasW && codelY >= 0 && codelY < canvasH && canvasColor[codelX][codelY] == 18)
         {
             codelX += dx[DP];
             codelY += dy[DP];
         }
 
-        if(codelX >= 0 && codelX < canvasN && codelY >= 0 && codelY < canvasN && canvasColor[codelX][codelY] != 19)
+        if(codelX >= 0 && codelX < canvasW && codelY >= 0 && codelY < canvasH && canvasColor[codelX][codelY] != 19)
         {
             nextColorIndex = canvasColor[codelX][codelY];
         }
@@ -314,26 +366,62 @@ function oneStep()
             }
             if(tries >= 8)
             {
-                console.log('code was ended')
+                debug.value = "Code Was Ended"
+                // console.log('code was ended')
                 reset(false)
                 step = -1
                 return;
             }
             continue;
         }
-
-        console.log("Command no.", (nextColorIndex % 6 - nowColorIndex % 6 + 6) % 6 * 3 + (parseInt(nextColorIndex / 6) - parseInt(nowColorIndex / 6) + 3) % 3)
+        debug.value = "Step: " + step + "\n"
+        debug.value += "Location: ["+ codelX + ", " + codelY + "]\n"
+        debug.value += "DP: "
+        switch(DP)
+        {
+            case 0:
+                debug.value += "RIGHT\n"
+                break;
+            case 1:
+                debug.value += "DOWN\n"
+                break;
+            case 2:
+                debug.value += "LEFT\n"
+                break;
+            case 3:
+                debug.value += "UP\n"
+                break;
+            default:
+                break;
+        }
+        debug.value += "CC: "
+        switch(CC)
+        {
+            case 0:
+                debug.value += "LEFT\n"
+                break;
+            case 1:
+                debug.value += "RIGHT\n"
+                break;
+            default:
+                break;
+        }
+        debug.value += "Command: "
         switch((nextColorIndex % 6 - nowColorIndex % 6 + 6) % 6 * 3 + (parseInt(nextColorIndex / 6) - parseInt(nowColorIndex / 6) + 3) % 3)
         {
             case 0:
+                debug.value += "None\n"
                 break;
             case 1:
+                debug.value += "Push\n"
                 stack.push(list.length);
                 break;
             case 2:
+                debug.value += "Pop\n"
                 if(stack.length != 0) stack.pop();
                 break;
             case 3:
+                debug.value += "Add\n"
                 if(stack.length >= 2)
                 {
                     var b = stack.pop();
@@ -342,6 +430,7 @@ function oneStep()
                 }
                 break;
             case 4:
+                debug.value += "Subtract\n"
                 if(stack.length >= 2)
                 {
                     var b = stack.pop();
@@ -350,6 +439,7 @@ function oneStep()
                 }
                 break;
             case 5:
+                debug.value += "Multiply\n"
                 if(stack.length >= 2)
                 {
                     var b = stack.pop();
@@ -358,6 +448,7 @@ function oneStep()
                 }
                 break;
             case 6:
+                debug.value += "divide\n"
                 if(stack.length >= 2)
                 {
                     var b = stack.pop();
@@ -365,12 +456,13 @@ function oneStep()
                     else
                     {
                         var a = stack.pop();
-                        stack.push(parseInt(a / b)); //확인 필요
+                        stack.push(parseInt(a / b));
                     }
                     
                 }
                 break;
             case 7:
+                debug.value += "Mod\n"
                 if(stack.length >= 2)
                 {
                     var b = stack.pop();
@@ -384,6 +476,7 @@ function oneStep()
                 }
                 break;
             case 8:
+                debug.value += "Not\n"
                 if(stack.length != 0)
                 {
                     var a = stack.pop();
@@ -392,6 +485,7 @@ function oneStep()
                 }
                 break;
             case 9:
+                debug.value += "Greater\n"
                 if(stack.length >= 2)
                 {
                     var b = stack.pop();
@@ -401,18 +495,21 @@ function oneStep()
                 }
                 break;
             case 10:
+                debug.value += "Pointer(DP Rotate)\n"
                 if(stack.length != 0)
                 {
                     DP = ((DP + stack.pop()) % 4 + 4) % 4;
                 }
                 break;
             case 11:
+                debug.value += "Switch(CC Rotate)\n"
                 if(stack.length != 0)
                 {
                     CC = ((CC + stack.pop()) % 2 + 2) % 2;
                 }
                 break;
             case 12:
+                debug.value += "Duplicate\n"
                 if(stack.length != 0)
                 {
                     var a = stack.pop();
@@ -421,6 +518,7 @@ function oneStep()
                 }
                 break;
             case 13:
+                debug.value += "Roll\n"
                 if(stack.size()>=2)
                 {
                     var b = stack.pop();
@@ -450,6 +548,7 @@ function oneStep()
                 }
                 break;
             case 14:
+                debug.value += "In(Number)\n"
                 var pnt = pointer;
                 var sign = 1;
                 var result = 0;
@@ -476,6 +575,7 @@ function oneStep()
                 }
                 break;
             case 15:
+                debug.value += "In(Char)\n"
                 if(pointer < inputString.length)
                 {
                     stack.push(inputString.charCodeAt(pointer));
@@ -483,6 +583,7 @@ function oneStep()
                 }
                 break;
             case 16:
+                debug.value += "Out(Number)\n"
                 if(stack.length != 0)
                 {
                     var a = stack.pop();
@@ -491,6 +592,7 @@ function oneStep()
                 }
               break;
             case 17:
+                debug.value += "Out(Char)\n"
                 if(stack.length != 0)
                 {
                     var a = stack.pop();
@@ -501,7 +603,7 @@ function oneStep()
             default:
               break;
         }
-        console.log(stack)
+        debug.value += "Stack: "+stack+"\n"
         step++;
         return;
     }
@@ -537,31 +639,32 @@ function exportFile() {
 
 function createData()
 {
-    const pad = canvasN % 4
-    const uint8 = new Uint8Array(26 + canvasN * canvasN * 3 + canvasN * pad)
+    const pad = canvasW % 4
+    const uint8 = new Uint8Array(26 + canvasW * canvasH * 3 + canvasH * pad)
     uint8[0] = 0x42; 
     uint8[1] = 0x4d; 
 
-    uint8[2] = (26 + canvasN * canvasN * 3 + canvasN * pad) % 256
-    uint8[3] = (26 + canvasN * canvasN * 3 + canvasN * pad) / 256
+    uint8[2] = (26 + canvasW * canvasH * 3 + canvasH * pad) % 256
+    uint8[3] = (26 + canvasW * canvasH * 3 + canvasH * pad) / 256 % 256
+    uint8[4] = (26 + canvasW * canvasH * 3 + canvasH * pad) / 256 / 256
 
     uint8[10] = 0x1a;
     uint8[14] = 0x0c;
 
-    uint8[18] = canvasN;
-    uint8[20] = canvasN;
+    uint8[18] = canvasW;
+    uint8[20] = canvasH;
 
     uint8[22] = 0x01;
     uint8[24] = 0x18;
 
-    for(var i = 0; i < 30; i++)
+    for(var i = 0; i < canvasW; i++)
     {
-        for(var j = 0; j < 30; j++)
+        for(var j = 0; j < canvasH; j++)
         {
-            var hex = color[canvasColor[j][canvasN - 1 - i]]
-            uint8[26 + (i * canvasN + j) * 3 + 2 + i * pad] = parseInt(hex[1] + hex[2], 16);
-            uint8[26 + (i * canvasN + j) * 3 + 1 + i * pad] = parseInt(hex[3] + hex[4], 16);
-            uint8[26 + (i * canvasN + j) * 3 + 0 + i * pad] = parseInt(hex[5] + hex[6], 16);
+            var hex = color[canvasColor[i][j]]
+            uint8[26 + ((canvasH - 1 - j) * canvasW + i) * 3 + 2 + (canvasH - 1 - j) * pad] = parseInt(hex[1] + hex[2], 16);
+            uint8[26 + ((canvasH - 1 - j) * canvasW + i) * 3 + 1 + (canvasH - 1 - j) * pad] = parseInt(hex[3] + hex[4], 16);
+            uint8[26 + ((canvasH - 1 - j) * canvasW + i) * 3 + 0 + (canvasH - 1 - j) * pad] = parseInt(hex[5] + hex[6], 16);
         }
     }
     return uint8.buffer
