@@ -519,7 +519,7 @@ function oneStep()
                 break;
             case 13:
                 debug.value += "Roll\n"
-                if(stack.size()>=2)
+                if(stack.length >= 2)
                 {
                     var b = stack.pop();
                     var a = stack.pop();
