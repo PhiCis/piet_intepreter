@@ -623,18 +623,20 @@ function stopStep()
     step = -1
 }
 
-const exportButton = document.getElementById('download');
-exportButton.addEventListener('click', exportFile);
+const download = document.getElementById('download');
+download.addEventListener('click', exportFile);
 const link = document.createElement( 'a' );
 link.style.display = 'none';
-document.body.appendChild(link);
 
-function exportFile() {
-    const buffer = createData(); /* ArrayBuffer 형식의 데이터를 생성하는 함수 */ 
+function exportFile() 
+{
+    const buffer = createData(); 
     const blob = new Blob([buffer], {type: 'application/octet-stream'})
     link.href = URL.createObjectURL(blob);
     link.download = 'file.bmp';
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
 }
 
 function createData()
@@ -670,7 +672,59 @@ function createData()
     return uint8.buffer
 }
 
-function upload()
-{
+const upload = document.getElementById("upload");
+upload.addEventListener("change", importFile);
 
+function importFile()
+{
+    const selectedFile = upload.files[0];
+    console.log(selectedFile)
+    new Response(selectedFile).arrayBuffer().then(function(resolvedData){
+        const uint8 = new Uint8Array(resolvedData)
+        console.log(uint8)
+
+        canvasW = uint8[18]
+        canvasH = uint8[20]
+
+        const temp = uint8[10]
+        const pad = canvasW % 4
+
+        for(var i = 0; i < 100; i++)
+        {
+            for(var j = 0; j < 100; j++)
+            {
+                if(i < canvasW && j < canvasH)
+                {
+                    var hex = '#' 
+                    hex += uint8[temp + ((canvasH - 1 - j) * canvasW + i) * 3 + 2 + (canvasH - 1 - j) * pad].toString(16).padStart(2, '0');
+                    hex += uint8[temp + ((canvasH - 1 - j) * canvasW + i) * 3 + 1 + (canvasH - 1 - j) * pad].toString(16).padStart(2, '0');
+                    hex += uint8[temp + ((canvasH - 1 - j) * canvasW + i) * 3 + 0 + (canvasH - 1 - j) * pad].toString(16).padStart(2, '0');
+                    for(var k = 0; k < 20; k++)
+                    {
+                        if(color[k] == hex)
+                        {
+                            canvasColor[i][j] = k
+                        }
+                    }
+                }
+                else
+                {
+                    canvasColor[i][j] = 18
+                }
+            }
+        }
+        ctx.fillStyle = color[18]
+        ctx.fillRect(0, 0, 3000, 3000)
+        for(var i = 0; i < canvasW; i++) 
+        {
+            for(var j = 0; j < canvasH; j++)
+            {
+                ctx.fillStyle = color[canvasColor[i][j]]
+                ctx.fillRect(i * canvasSize, j * canvasSize, canvasSize, canvasSize)
+                ctx.strokeRect(i * canvasSize, j * canvasSize, canvasSize, canvasSize)
+            }
+        }
+        widthSlider.value = canvasWidth.innerHTML = canvasW
+        heightSlider.value = canvasHeight.innerHTML = canvasH
+    });
 }
