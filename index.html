@@ -79,6 +79,28 @@
                 margin: 6px 0px;
                 cursor: pointer;
             }
+            .filebox label{
+                background-color: rgb(150, 214, 240);
+                border: none;
+                border-radius: 5px;
+                color: black;
+                padding: 5px 15px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 20px;
+                margin: 6px 0px;
+                cursor: pointer;
+            }
+            .filebox input[type="file"]{
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip:rect(0,0,0,0);
+                border: 0;
+            }
             .slider{
                 -webkit-appearance: none;
                 width: 100%;
@@ -117,13 +139,16 @@
                 <canvas id="myNowColor" width="60" height="60"></canvas>
             </div>
             <div class = 'button-div'>
-                <button type="button" class="button" onclick="deleteCanvas();">캔버스 삭제</button>
-                <button type="button" class="button" onclick="reset(true);">초기화</button>
-                <button type="button" class="button" onclick="oneStep();">한 단계 실행</button>
-                <button type="button" class="button" onclick="execute();">실행</button>
-                <button type="button" class="button" onclick="stopStep();">중지</button>
-                <button type="button" id="download" class="button">다운로드 (.bmp)</button>
-                <button type="button" id="upload" class="button" onclick="upload();"><del>업로드 (.bmp, 추가 예정)</del></button>
+                <div class="filebox">
+                    <button type="button" class="button" onclick="deleteCanvas();">캔버스 삭제</button>
+                    <button type="button" class="button" onclick="reset(true);">초기화</button>
+                    <button type="button" class="button" onclick="oneStep();">한 단계 실행</button>
+                    <button type="button" class="button" onclick="execute();">실행</button>
+                    <button type="button" class="button" onclick="stopStep();">중지</button>
+                    <button type="button" id="download" class="button">다운로드 (.bmp)</button>
+                    <input class="filebox" type="file" id="upload" accept=".bmp">
+                    <label class="filebox" for="upload">업로드 (.bmp)</label>
+                </div>
             </div>
             <div class="slider-div">
                 <input type="range" min="1" max="100" value="50" class="slider" id="myWidth">
